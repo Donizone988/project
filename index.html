@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050d07">
+<title>Saldo — Controle financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+<symbol id="i-swap" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M7 13l5-5 5 5M5 4h14"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+</defs></svg>
+<div class="app">
+
+  <aside class="side">
+    <div class="brand"><span class="logo">S</span><span class="brand-name">saldo<i>.</i></span></div>
+    <nav class="side-nav" id="sideNav">
+      <button data-view="dashboard" class="on"><span><svg class="i"><use href="#i-home"/></svg></span>Visão geral</button>
+      <button data-view="moves"><span><svg class="i"><use href="#i-swap"/></svg></span>Movimentações</button>
+      <button data-view="debts"><span><svg class="i"><use href="#i-card"/></svg></span>Dívidas</button>
+      <button data-view="goals"><span><svg class="i"><use href="#i-target"/></svg></span>Metas</button>
+    </nav>
+    <div class="side-foot">
+      <div class="tip"><b>Pequenos passos.</b><p>Organizar hoje deixa o amanhã mais leve.</p></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow" id="dateLabel"></p>
+        <h1 id="pageTitle">Visão geral</h1>
+      </div>
+      <div class="top-actions">
+        <select id="monthFilter" aria-label="Período"></select>
+        <button class="btn lime desk-only" id="addTop"><svg class="i"><use href="#i-plus"/></svg> Nova movimentação</button>
+      </div>
+    </header>
+
+    <!-- VISÃO GERAL -->
+    <section id="view-dashboard" class="view">
+      <div class="hero">
+        <div class="hero-main">
+          <p class="hero-label">Saldo do período</p>
+          <strong class="hero-value" id="balance">R$ 0,00</strong>
+          <p class="hero-sub" id="balanceSub"></p>
+        </div>
+        <div class="hero-chips">
+          <div class="chip"><span class="chip-ic up"><svg class="i"><use href="#i-down"/></svg></span><div><small>Entradas</small><b id="sumIncome">R$ 0,00</b></div></div>
+          <div class="chip"><span class="chip-ic down"><svg class="i"><use href="#i-up"/></svg></span><div><small>Gastos</small><b id="sumExpense">R$ 0,00</b></div></div>
+        </div>
+      </div>
+
+      <div class="quick"><button data-new="income"><svg class="i"><use href="#i-down"/></svg><span>Entrada</span></button><button data-new="expense"><svg class="i"><use href="#i-up"/></svg><span>Gasto</span></button><button data-new="debt"><svg class="i"><use href="#i-card"/></svg><span>Dívida</span></button><button data-new="goal"><svg class="i"><use href="#i-target"/></svg><span>Meta</span></button></div>
+
+      <div class="stats">
+        <article class="stat"><small>Dívidas em aberto</small><b id="sumDebt" class="amber">R$ 0,00</b><span id="debtCount" class="muted"></span></article>
+        <article class="stat"><small>Guardado em metas</small><b id="sumGoals" class="lime-t">R$ 0,00</b><span id="goalCount" class="muted"></span></article>
+        <article class="stat"><small>Saldo após quitar dívidas</small><b id="netAfterDebt">R$ 0,00</b><span class="muted">Saldo menos dívidas</span></article>
+      </div>
+
+      <div class="grid2">
+        <section class="panel">
+          <div class="panel-head"><h3>Gastos no período</h3><b class="head-total" id="catTotal">R$ 0</b></div>
+          <div class="chart" id="spendChart"></div>
+          <ul class="legend cat-list" id="legend"></ul>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>Fluxo dos últimos 6 meses</h3>
+            <span class="key"><i class="k1"></i>Entradas <i class="k2"></i>Gastos</span></div>
+          <div class="trend" id="trendChips"></div>
+          <div class="chart" id="flowChart"></div>
+        </section>
+      </div>
+
+      <div class="grid2">
+        <section class="panel">
+          <div class="panel-head"><h3>Últimas movimentações</h3><button class="link" data-goto="moves">Ver tudo</button></div>
+          <div class="list" id="recent"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>Dívidas e metas</h3><span class="key"><i class="k3"></i>Dívidas <i class="k1 gap"></i>Metas</span></div>
+          <div id="previewProgress"></div>
+        </section>
+      </div>
+
+      <section class="panel" id="radarPanel">
+        <div class="panel-head"><h3>Saldo Radar</h3></div>
+        <div class="list" id="radarList"></div>
+      </section>
+
+      <section class="panel data-panel">
+        <div class="panel-head"><h3>Seus dados</h3></div>
+        <p class="muted small">Tudo fica salvo só neste aparelho. Faça backup de vez em quando.</p>
+        <p class="muted small" id="lastSync"></p>
+        <p class="muted small" id="whoami"></p>
+        <div class="row-btns">
+          <button class="btn ghost" id="exportCsv"><svg class="i"><use href="#i-download"/></svg> Exportar CSV</button>
+          <button class="btn ghost" id="exportJson"><svg class="i"><use href="#i-download"/></svg> Backup JSON</button>
+          <label class="btn ghost file"><svg class="i"><use href="#i-upload"/></svg> Restaurar backup<input type="file" id="importJson" accept="application/json" hidden></label>
+          <button class="btn ghost" id="logout"><svg class="i"><use href="#i-x"/></svg> Sair da conta</button>
+          <button class="btn ghost" id="bankConnect"><svg class="i"><use href="#i-swap"/></svg> Conectar banco (teste)</button>
+          <button class="btn ghost hidden" id="bankSync"><svg class="i"><use href="#i-swap"/></svg> Sincronizar</button>
+          <button class="btn ghost hidden" id="bankDisc"><svg class="i"><use href="#i-x"/></svg> Desconectar banco</button>
+          <label class="btn ghost file"><svg class="i"><use href="#i-upload"/></svg> Importar extrato (CSV/OFX)<input type="file" id="importStmt" accept=".csv,.ofx,.txt" hidden></label>
+          <button class="btn danger" id="delAccount"><svg class="i"><use href="#i-trash"/></svg> Excluir minha conta</button>
+          <button class="btn danger" id="resetAll"><svg class="i"><use href="#i-trash"/></svg> Apagar tudo</button>
+        </div>
+      </section>
+    </section>
+
+    <!-- MOVIMENTAÇÕES -->
+    <section id="view-moves" class="view hidden">
+      <div class="toolbar">
+        <div><h2>Movimentações</h2><p class="muted">Tudo o que entra e sai.</p></div>
+        <button class="btn lime" data-new="expense"><svg class="i"><use href="#i-plus"/></svg> Adicionar</button>
+      </div>
+      <section class="panel">
+        <div class="filters">
+          <input id="search" placeholder="Buscar descrição ou categoria…">
+          <select id="typeFilter"><option value="all">Todos</option><option value="income">Entradas</option><option value="expense">Gastos</option></select>
+        </div>
+        <div class="list" id="allMoves"></div>
+      </section>
+    </section>
+
+    <!-- DÍVIDAS -->
+    <section id="view-debts" class="view hidden">
+      <div class="toolbar">
+        <div><h2>Dívidas</h2><p class="muted">Saiba quanto falta pagar.</p></div>
+        <button class="btn lime" data-new="debt"><svg class="i"><use href="#i-plus"/></svg> Nova dívida</button>
+      </div>
+      <div class="mini-stats">
+        <div class="stat"><small>Total devido</small><b id="dTotal">R$ 0,00</b></div>
+        <div class="stat"><small>Já pago</small><b id="dPaid" class="lime-t">R$ 0,00</b></div>
+        <div class="stat"><small>Falta pagar</small><b id="dLeft" class="amber">R$ 0,00</b></div>
+      </div>
+      <div class="cards" id="debtList"></div>
+    </section>
+
+    <!-- METAS -->
+    <section id="view-goals" class="view hidden">
+      <div class="toolbar">
+        <div><h2>Metas</h2><p class="muted">Transforme planos em objetivos possíveis.</p></div>
+        <button class="btn lime" data-new="goal"><svg class="i"><use href="#i-plus"/></svg> Nova meta</button>
+      </div>
+      <div class="mini-stats">
+        <div class="stat"><small>Total das metas</small><b id="gTarget">R$ 0,00</b></div>
+        <div class="stat"><small>Já guardado</small><b id="gSaved" class="lime-t">R$ 0,00</b></div>
+        <div class="stat"><small>Falta guardar</small><b id="gLeft">R$ 0,00</b></div>
+      </div>
+      <div class="cards" id="goalList"></div>
+    </section>
+
+    <footer class="foot">Saldo<i>.</i> · Seu controle. Seu ritmo.</footer>
+  </main>
+
+  <nav class="tabbar" id="tabbar">
+    <button data-view="dashboard" class="on"><span><svg class="i"><use href="#i-home"/></svg></span><small>Início</small></button>
+    <button data-view="moves"><span><svg class="i"><use href="#i-swap"/></svg></span><small>Movimentos</small></button>
+    <button class="fab" id="fab" aria-label="Nova movimentação"><svg class="i"><use href="#i-plus"/></svg></button>
+    <button data-view="debts"><span><svg class="i"><use href="#i-card"/></svg></span><small>Dívidas</small></button>
+    <button data-view="goals"><span><svg class="i"><use href="#i-target"/></svg></span><small>Metas</small></button>
+  </nav>
+</div>
+
+<div class="backdrop hidden" id="backdrop">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head"><h2 id="mTitle"></h2><button class="x" id="mClose" aria-label="Fechar"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <form id="mForm"></form>
+  </section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script src="core.js"></script>
+<script src="radar.js"></script>
+<script src="auth.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

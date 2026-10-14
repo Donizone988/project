@@ -1,0 +1,5 @@
+SALDO - Controle financeiro
+
+Como usar no computador: abra o index.html no navegador.
+Como publicar no Netlify: arraste esta pasta (ou o ZIP) na aba Deploys do seu site.
+Os dados ficam salvos no navegador do aparelho. Use "Backup JSON" para guardar uma cópia.

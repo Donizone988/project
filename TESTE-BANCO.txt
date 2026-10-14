@@ -1,0 +1,10 @@
+SALDO - TESTE DA CONEXÃO COM BANCO (somente dados de teste)
+
+1. Crie uma conta grátis em https://dashboard.pluggy.ai, crie uma aplicação e copie o Client ID e o Client Secret.
+2. Nesta pasta, copie o arquivo ".env.example" para ".env" e cole as duas chaves nele.
+   NUNCA envie o .env para ninguém nem cole as chaves em conversas.
+3. Instale o Node.js (nodejs.org). Abra o terminal nesta pasta e rode:  npx netlify-cli dev
+4. Abra o endereço que aparecer (http://localhost:8888). Em "Seus dados", clique em "Conectar banco (teste)",
+   escolha "Pluggy Bank" e use as credenciais de teste mostradas pela Pluggy (código MFA de teste: 123456).
+Isso NÃO publica nada no Netlify. Esta ponte só funciona com SALDO_TEST_MODE=1 e não tem login de usuário:
+não use em produção.
